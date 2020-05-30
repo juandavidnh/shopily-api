@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS shopily_item_list;
