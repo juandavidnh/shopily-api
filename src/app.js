@@ -6,6 +6,8 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const authUserRouter = require('./auth/auth-user-router')
 const usersRouter = require('./users/users-router')
+const supermarketsRouter = require('./supermarkets/supermarkets-router')
+const itemListRouter = require('./itemList/item-list-router')
 
 const app = express()
 
@@ -19,6 +21,8 @@ app.use(cors())
 
 app.use('/api/auth', authUserRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/supermarkets', supermarketsRouter)
+app.use('/api/item-list', itemListRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, boilerplate!')

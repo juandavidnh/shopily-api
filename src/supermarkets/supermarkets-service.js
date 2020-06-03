@@ -21,6 +21,14 @@ const SupermarketsService = {
             .first()
     },
 
+    getByName(db, supermarketName) {
+        return db
+            .from('shopily_supermarkets')
+            .select('*')
+            .where('supermarket_name', supermarketName)
+            .first()
+    },
+
     supermarketExists(db, supermarketName) {
         return db('shopily_supermarkets')
             .where({ supermarket_name: supermarketName })
@@ -33,6 +41,8 @@ const SupermarketsService = {
             .from('shopily_supermarkets')
             .where({id: supermarketId})
             .update(updatedSupermarket)
+            .returning('*')
+            .then(([supermarket]) => supermarket)
     },
 
     serializeSupermarket(supermarket) {

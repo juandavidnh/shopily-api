@@ -5,7 +5,7 @@ const ItemListService = {
         return db.select('*').from('shopily_item_list')
     },
 
-    insertSupermarket(db, newItem) {
+    insertItem(db, newItem) {
         return db
             .insert(newItem)
             .into('shopily_item_list')
@@ -42,9 +42,16 @@ const ItemListService = {
             code: xss(item.code),
             aisle: item.aisle,
             supermarket_id: item.supermarket_id,
-            date_created: new Date(supermarket.date_created)
+            date_created: new Date(item.date_created)
         }
     },
+
+    getItemsFromSupermarket(db, supermarketId) {
+        return db
+            .from('shopily_item_list')
+            .select('*')
+            .where('supermarket_id', supermarketId)
+    }
 }
 
 module.exports = ItemListService
