@@ -75,5 +75,31 @@ shoppingListRouter
             })
             .catch(next)
     })
+    .patch(jsonBodyParser, (req, res, next) => {
+        const { status } = req.body
+
+        const updatedTask = { status }
+
+        const numberOfValues = Object.values(updatedTask).filter(Boolean).length
+        if(numberOfValues === 0){
+            return res.status(400).json({
+                error:{
+                    message: `Request must contain at least one value to update`        
+                }
+            })
+        }
+
+        ShoppingListService.changeStatus(
+            req.app.get('db'),
+            req.params.userId,
+            req.params.itemId,
+            updatedTask
+        )
+        .then(item => {
+            res.json(item)
+        })
+        .catch(next)
+
+    })
 
 module.exports = shoppingListRouter

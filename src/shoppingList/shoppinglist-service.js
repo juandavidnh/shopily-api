@@ -49,6 +49,18 @@ const ItemListService = {
                     item_id: itemId })
             .first()
             .then(product => !!product)
+    },
+
+    changeStatus(db, userId, itemId, updatedItem) {
+        return db
+            .from('shopily_shopping_list')
+            .where({
+                user_id: userId,
+                item_id: itemId 
+            })
+            .update(updatedItem)
+            .returning('*')
+            .then(([item]) => item)
     }
 }
 
