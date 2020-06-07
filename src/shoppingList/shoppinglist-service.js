@@ -1,4 +1,3 @@
-const xss = require('xss')
 
 const ItemListService = {
     getShoppingList(db, userId) {

@@ -21,6 +21,14 @@ const ItemListService = {
             .first()
     },
 
+    getByCode(db, code) {
+        return db   
+            .from('shopily_item_list')
+            .select('*')
+            .where('code', code)
+            .first()
+    },
+
     itemExists(db, productName) {
         return db('shopily_item_list')
             .where({ product_name: productName })
@@ -33,6 +41,8 @@ const ItemListService = {
             .from('shopily_item_list')
             .where({id: itemId})
             .update(updatedItem)
+            .returning('*')
+            .then(([item]) => item)
     },
 
     serializeItem(item) {

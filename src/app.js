@@ -8,6 +8,7 @@ const authUserRouter = require('./auth/auth-user-router')
 const usersRouter = require('./users/users-router')
 const supermarketsRouter = require('./supermarkets/supermarkets-router')
 const itemListRouter = require('./itemList/item-list-router')
+const shoppingListRouter = require('./shoppingList/shoppinglist-router')
 
 const app = express()
 
@@ -23,6 +24,7 @@ app.use('/api/auth', authUserRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/supermarkets', supermarketsRouter)
 app.use('/api/item-list', itemListRouter)
+app.use('/api/shopping-list', shoppingListRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, boilerplate!')
