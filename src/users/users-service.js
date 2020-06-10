@@ -70,11 +70,10 @@ const UsersService = {
             id: user.id,
             first_name: xss(user.first_name),
             last_name: xss(user.last_name),
-            nickname: xss(user.nickname),
             email: xss(user.email),
             password: xss(user.password),
-            points: user.points,
-            home_id: user.home_id,
+            city: xss(user.city),
+            supermarket_id: user.supermarket_id,
             date_created: new Date(user.date_created),
         }
     }
