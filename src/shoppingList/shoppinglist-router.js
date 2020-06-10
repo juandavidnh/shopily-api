@@ -71,7 +71,7 @@ shoppingListRouter
             req.params.itemId
         )
             .then(() => {
-                res.json("Item deleted")
+                res.status(200).json("OK")
             })
             .catch(next)
     })
