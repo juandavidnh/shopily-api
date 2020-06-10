@@ -1,6 +1,7 @@
 const express = require('express')
 const UsersService = require('./users-service')
 const AuthService = require('../auth/auth-service')
+const { requireAuth } = require('../middleware/jwt-auth-user')
 
 const usersRouter = express.Router()
 const jsonBodyParser = express.json()
@@ -60,6 +61,40 @@ usersRouter
                 }
             })
             .catch(next)
+    })
+
+usersRouter
+    .route('/own')
+    .all(requireAuth)
+    .all((req, res, next) => {
+        const authToken = req.get('Authorization') || ''
+
+        let bearerToken
+        if(!authToken.toLowerCase().startsWith('bearer ')) {
+            return res.status(401).json({ error: 'Missing bearer token'})
+        } else {
+            bearerToken = authToken.slice(7, authToken.length)
+        }
+
+        //extract user from token
+        const payload = AuthService.verifyJwt(bearerToken)
+
+        AuthService.getUserWithEmail(
+            req.app.get('db'), 
+            payload.sub
+            )
+            .then(myUser => {
+                if(!myUser){
+                    return res.status(401).json({ error: 'User not found' })
+                }
+                res.user = myUser
+                next()
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        //return user object
+        res.json(UsersService.serializeUser(res.user))
     })
 
 module.exports = usersRouter
