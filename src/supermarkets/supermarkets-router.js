@@ -9,7 +9,6 @@ const jsonBodyParser = express.json()
 
 supermarketsRouter
     .route('/')
-    .all(requireAuth)
     .get((req, res, next) => {
         SupermarketsService.getAllSupermarkets(req.app.get('db'))
             .then(supermarkets  => {
