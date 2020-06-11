@@ -52,10 +52,16 @@ shoppingListRouter
                 item_id
             )
                 .then(item => {
-                    res 
-                        .status(201)
-                        .location(path.posix.join(req.originalUrl, `/${item.item_id}`))
-                        .json(item)
+                    ItemListService.getById(
+                        req.app.get('db'),
+                        item.item_id
+                    )
+                    .then(item => {
+                        res 
+                            .status(201)
+                            .location(path.posix.join(req.originalUrl, `/${item.id}`))
+                            .json(item)
+                    })
                 })
         })
         .catch(next)
