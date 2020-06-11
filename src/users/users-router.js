@@ -96,5 +96,76 @@ usersRouter
         //return user object
         res.json(UsersService.serializeUser(res.user))
     })
+    .patch(jsonBodyParser, (req, res, next) => {
+        const { email, password, first_name, last_name, supermarket_id, city } = req.body
+
+        if(password){
+            const passwordError = UsersService.validatePassword(password)
+
+            if(passwordError){
+                return res.status(400).json({error: passwordError})
+            }
+
+            UsersService.hashPassword(password)
+            .then(hashedPassword => {
+                const updateToUser = {
+                    email,
+                    password: hashedPassword,
+                    first_name,
+                    last_name,
+                    supermarket_id,
+                    city
+                }
+
+                const numberOfValues = Object.values(updateToUser).filter(Boolean).length
+                if(numberOfValues === 0) {
+                    return res.status(400).json({
+                    error: {
+                        message: `Request must contain at least one value to update`
+                        }
+                    })
+                }
+
+                return UsersService.updateUser(
+                    req.app.get('db'),
+                    res.user.id,
+                    updateToUser
+                )
+                .then(() => {
+                    res.status(200).json('OK')
+                })
+            })
+            .catch(next)
+        }
+
+        const updateToUser = {
+            email,
+            first_name,
+            last_name,
+            supermarket_id,
+            city
+        }
+
+        const numberOfValues = Object.values(updateToUser).filter(Boolean).length
+        if(numberOfValues === 0) {
+            return res.status(400).json({
+            error: {
+                message: `Request must contain at least one value to update`
+                }
+            })
+        }
+
+        return UsersService.updateUser(
+            req.app.get('db'),
+            res.user.id,
+            updateToUser
+        )
+        .then(() => {
+            res.status(200).json('OK')
+        })
+        .catch(next)
+
+    }) 
+    
 
 module.exports = usersRouter
