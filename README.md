@@ -1,4 +1,4 @@
-# Choretastic API
+# Shopily API
 
 ## Summary
 
